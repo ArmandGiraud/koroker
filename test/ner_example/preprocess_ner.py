@@ -2,7 +2,7 @@ from koroker.prepare import PrepareNer
 
 
 def main():
-    PrepareNer('./test/config_example/data_prepare.ini')
+    PrepareNer('./test/config_example/data_prepare_onto.ini')
     return
 
 

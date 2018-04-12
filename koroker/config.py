@@ -82,6 +82,7 @@ class ConfigLstmCrf(BaseConfig):
         self.word_lstm_hidden = self.config['hyper'].getint('word_hidden', 300)
         self.char_lstm_hidden = self.config['hyper'].getint('char_hidden', 100)
         self.grad_clip = self.config['hyper'].getfloat('grad_clip', 5.0)
-
-        # log
+	    #gpu allocation
+        self.gpu_nb = self.config['gpu'].getint('gpu_nb', 0)
+	    # log
         self.logger = new_logger('train_alpha', self.log_path)

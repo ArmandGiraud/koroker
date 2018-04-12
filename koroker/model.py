@@ -7,7 +7,7 @@ from .base import BaseSeqLabel
 from .utils.data_io import embed_from_npy, load_pickle
 from .utils.data_process import pad_batch, create_batch
 from .config import ConfigLstmCrf
-
+print("hello")
 
 # lstm crf model for sequence labeling
 class ModelLstmCrf(BaseSeqLabel):
@@ -284,14 +284,15 @@ class ModelLstmCrf(BaseSeqLabel):
 
     # graph build
     def build_graph(self):
-        self.add_placeholder()
-        self.add_char_lstm()
-        self.add_word_lstm()
-        self.add_logits_op()
-        self.add_pred_no_crf()
-        self.add_loss_op()
-        self.add_train_op()
-        self.add_init_op()
+        with tf.device('/gpu:'+str(self.config.gpu_nb)):
+            self.add_placeholder()
+            self.add_char_lstm()
+            self.add_word_lstm()
+            self.add_logits_op()
+            self.add_pred_no_crf()
+            self.add_loss_op()
+            self.add_train_op()
+            self.add_init_op()
 
     # feed dict for model
     def build_feed_dict(self, sample, label=None, dropout=None):
@@ -409,8 +410,10 @@ class ModelLstmCrf(BaseSeqLabel):
 
         # load and split data
         train, dev, test = self.prepare_data()
+        config = tf.ConfigProto()
+        config.gpu_options.allow_growth = True
 
-        with tf.Session() as sess:
+        with tf.Session(config = config ) as sess:
             sess.run(self.var_init)
 
             # load trained model
